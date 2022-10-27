@@ -1,11 +1,9 @@
-# WebRTC ShareSheet Custom Scheme Signalling Channel
+# WebRTC ShareSheet Custom Scheme Signaling Channel
 
-In this repository, I describe an idea on how to use the iOS 16 / macOS Ventura
-`ShareLink` SwiftUI component for bringing up the Share Sheet in combination
-with AirDrop to exchange custom scheme URIs containing offer & answer SDP with
-built-in non-trickle ICE candidates in them.
+In this repository, I describe an idea on how to establish a peer connection via
+WebRTC between an iOS app and a macOS app both running a web app in a WKWebView.
 
-In this example, macOS is the offerer and iOS is the answerer.
+The steps to establish the connection are:
 
 1. Offerer creates the offer SDP
 2. Offerer collects ICE candidates
@@ -20,8 +18,12 @@ In this example, macOS is the offerer and iOS is the answerer.
 11. User uses AirDrop to drop the answer onto macOS offerer
 12. Offerer receives the answer SDP with ICE candidates
 
-After these 10 programmatic and 2 manual steps, the WebRTC connection gets
+In this example, macOS is the offerer and iOS is the answerer.
+
+After these 10 programmatic and 2 manual steps, the WebRTC connection should get
 established.
+
+## Disclaimer
 
 This is meant for local network peer to peer connection establishment, even
 though technically the collected candidates can be of type that allows peer
@@ -40,13 +42,26 @@ instead, synchronization is carried out manually whenever transferring from one
 device to another and wanting to continue working on the data originating from
 the other device.
 
-To work, this will need iOS 16 and macOS Ventura.
-Both of these OSs release on 2022-10-22.
+## `ShareLink`
 
-These OSs ship with SwiftUI component named `ShareLink` that makes it easier to
-present the Share Sheet with a custom URI than the current option which is too
-complex to bother with it.
+At first, I though I'd use the new SwiftUI `ShareLink` component to present the
+Share Sheet on both macOS and iOS.
+However, this component only seems to be present in SwiftUI for iOS, not macOS.
 
-Once I upgrade my iPhone to iOS 16, my Mac to macOS Ventura and install XCode 14
-to get the SwiftUI version with `ShareLink`, I will attempt to implement this
-and will capture the steps here if successful.
+## `navigator.share`
+
+While researching this problem, I learnt that the `navigator.share` API exists
+and is supported by `WKWebView`.
+However, I seem to have run into an issue where loading the HTML file via the
+`file:` protocol makes it so that its JS doesn't run in a secure context and
+access to `navigator.share` is forbidden:
+
+https://stackoverflow.com/q/74225960/2715716
+
+## Next steps
+
+I could look into invoking the Share Sheet from Swift but without `ShareLink`
+which is going to be cumbersome.
+
+I could also continue looking for ways to allow `navigator.share` to work while
+not in a secure context, but this might be impossible.
