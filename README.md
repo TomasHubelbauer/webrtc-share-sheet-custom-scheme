@@ -65,3 +65,7 @@ which is going to be cumbersome.
 
 I could also continue looking for ways to allow `navigator.share` to work while
 not in a secure context, but this might be impossible.
+
+I could use a custom scheme with WKWebView which seems to work around `file:`
+not being treated as secure context:
+https://stackoverflow.com/a/70009737/2715716
