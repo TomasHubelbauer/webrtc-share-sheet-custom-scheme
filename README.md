@@ -50,13 +50,9 @@ However, this component only seems to be present in SwiftUI for iOS, not macOS.
 
 ## `navigator.share`
 
-While researching this problem, I learnt that the `navigator.share` API exists
-and is supported by `WKWebView`.
-However, I seem to have run into an issue where loading the HTML file via the
-`file:` protocol makes it so that its JS doesn't run in a secure context and
-access to `navigator.share` is forbidden:
-
-https://stackoverflow.com/q/74225960/2715716
+The Web Share API, `navigator.share`, can be used to call up the Share Sheet,
+but it will only allow sharing HTTP and HTTS URLs, not arbitrary custom scheme
+URLs.
 
 ## Next steps
 
